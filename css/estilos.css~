@@ -41,7 +41,7 @@ body{
   justify-content: space-between;
 }
 .teclado img{
-	
+  display: flex;
   width: 22%;
   height: 62.91px;
 }

@@ -63,6 +63,40 @@ var Calculadora = {
 		
 		)  //FIN EVENT LISTENER
 		
+		teclas[i].addEventListener("mousedown", function () {
+		tecla = this.getAttribute("id")
+		if (tecla == "0" || tecla == "1"  || tecla == "2" || tecla == "3" || tecla == "punto" || tecla == "igual"  ) {
+		this.style.width = "28%"
+		this.style.height = "60px"
+		} // FIN IF
+		else if (tecla == "mas") {
+			this.style.width = "98%"
+			this.style.height = "98%"
+		} // FIN ELSE IF
+		else {
+				this.style.width = "21%"
+				this.style.height = "60px"	
+		} //FIN ELSE
+		}//FIN FUNCTION EVENT LISTENER
+		)//FIN EVENT LISTENER
+		
+		teclas[i].addEventListener("mouseup", function () {
+			tecla = this.getAttribute("id")
+			if (tecla == "0" || tecla == "1"  || tecla == "2" || tecla == "3" || tecla == "punto" || tecla == "igual" ) {
+				this.style.width = "29%"
+				this.style.height = "62.91px"
+			} // FIN IF
+			else if (tecla == "mas") {
+					this.style.width = "100%"
+					this.style.height = "100%"
+			} // FIN ELSE IF
+			else {
+						this.style.width = "22%"
+						this.style.height = "62.91px"	
+			} //FIN ELSE
+			}//FIN FUNCTION EVENT LISTENER
+			)//FIN EVENT LISTENER
+		
 		} //FIN FOR
 		
 	}, //FIN ESCUCHA CLICK
@@ -101,6 +135,7 @@ var Calculadora = {
 	ejecutaOperacion: function () {
 			arregloElementosOperacion = (sessionStorage.getItem("operacion")).split(",")
 			arregloElementosOperacionAnterior = (sessionStorage.getItem("operacionAnterior")).split(",")
+			this.resultado = Number(this.resultado)
 			var elemento
 			var resultadoParcial
 			var operando1,operando2;
@@ -119,6 +154,8 @@ var Calculadora = {
 												break;
 				default:
 				} // FIN SWITCH
+		
+			
 			} // FIN IF
 			else {
 			this.resultado = Number(arregloElementosOperacion[0])
@@ -138,8 +175,10 @@ var Calculadora = {
 			
 			} //FIN FOR
 			sessionStorage.setItem("operacionAnterior",sessionStorage.getItem("operacion"))			
-		} //FIN ELSE
 		
+		
+		} //FIN ELSE
+			
 			sessionStorage.setItem("operacion",this.resultado.toString().substr(0,9))
 			
 			this.flagResultado = 1
