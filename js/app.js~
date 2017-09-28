@@ -1,6 +1,7 @@
 var Calculadora = {
 	init: function () {
-		this.punto = 0
+		this.flagPunto = 0
+		this.flagCero = 0
 		this.resultado = 0
 		this.operacion=""
 		this.flagResultado = 1
@@ -16,6 +17,7 @@ var Calculadora = {
 		for (i=0; i<teclas.length; i++) {
 		teclas[i].addEventListener("click",function (e) {
 			tecla =this.getAttribute("id")
+			
 			switch(tecla) {
 				case "0":	self.asignaOperando(tecla)
 											break;
@@ -43,8 +45,6 @@ var Calculadora = {
 											break;		
 				case "sign":self.cambiaSigno()
 											break;		
-				case "raiz": self.asignaOperador(tecla)
-											break;		
 				case "dividido":	self.asignaOperador("/")
 											break;		
 				case "por":	self.asignaOperador("x")
@@ -67,8 +67,10 @@ var Calculadora = {
 		
 	}, //FIN ESCUCHA CLICK
 	asignaOperando: function (tecla) {	
-			if ((!this.punto && tecla==".") || tecla!=".") {
-			if (tecla=".") { this.punto = 1 }
+			if (this.resultado ="0") { this.flagCero = 1 } else { this.flagCero = 0}
+			if ((!this.flagPunto && tecla==".") || (tecla!="."  && ((!this.flagCero && tecla=="0") || tecla!="0") )     ) {
+			if (tecla==".") { this.flagPunto = 1 }
+			
 			this.longitudOperando = this.longitudOperando +1
 			if (this.longitudOperando<10) {
 			if (!this.flagResultado) {
@@ -92,7 +94,8 @@ var Calculadora = {
 			this.operacion =  this.operacion + "," + tecla + ","
 			sessionStorage.setItem("operacion",this.operacion)
 			this.flagResultado=0
-			this.punto = 0
+			this.flagPunto = 0
+			this.flagCero = 0
 			this.longitudOperando=0
 	}, //FIN ASIGNA OPERADOR
 	ejecutaOperacion: function () {
@@ -136,13 +139,12 @@ var Calculadora = {
 			} //FIN FOR
 			sessionStorage.setItem("operacionAnterior",sessionStorage.getItem("operacion"))			
 		} //FIN ELSE
-			//longitud = this.resultado.toString().length
-			//if (longitud>9){this.resultado = this.resultado.toFixed(9)}
-			//else {this.resultado = this.resultado}
+		
 			sessionStorage.setItem("operacion",this.resultado.toString().substr(0,9))
 			
 			this.flagResultado = 1
-			this.punto = 0
+			this.flagPunto = 0
+			this.flagCero = 0
 			this.muestraResultado()
 	},//FIN EJECUTA OPERACION
 	
@@ -152,6 +154,7 @@ var Calculadora = {
 			if (isNaN(textoOperacion)==false) {
 			pantalla = document.getElementById("display")
 			pantalla.innerHTML = textoOperacion
+			this.resultado = textoOperacion
 		} //FIN IF
 	},//FIN MUESTRA RESULTADO
 	onClear: function () {
@@ -159,7 +162,8 @@ var Calculadora = {
 		sessionStorage.setItem("operacion",this.resultado.toString())
 		this.flagResultado = 1
 		this.longitudOperando = 0
-		this.punto = 0
+		this.flagPunto = 0
+		this.flagCero = 0
 		this.muestraResultado()
 	},//FIN ONCLEAR
 	cambiaSigno: function () {
@@ -171,7 +175,7 @@ var Calculadora = {
 			this.resultado = this.resultado
 			sessionStorage.setItem("operacion",this.resultado.toString())
 		this.flagResultado = 1
-		this.punto = 0
+		this.flagPunto = 0
 		this.muestraResultado()
 		} //FIN IF
 		
