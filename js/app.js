@@ -4,6 +4,7 @@ var Calculadora = {
 		this.resultado = 0
 		this.operacion=""
 		this.flagResultado = 1
+		this.longitudOperando = 0
 		sessionStorage.setItem("operacion",this.operacion)
 		sessionStorage.setItem("operacionAnterior","")
 		this.escuchaClick()
@@ -36,6 +37,8 @@ var Calculadora = {
 											break;
 				case "9":	self.asignaOperando(tecla)
 											break;		
+				case "punto":	self.asignaOperando(".")
+											break;									
 				case "on":self.onClear()
 											break;		
 				case "sign":self.cambiaSigno()
@@ -127,7 +130,7 @@ var Calculadora = {
 			} //FIN FOR
 			sessionStorage.setItem("operacionAnterior",sessionStorage.getItem("operacion"))			
 		} //FIN ELSE
-			
+			this.resultado = this.resultado
 			sessionStorage.setItem("operacion",this.resultado.toString())
 			
 			this.flagResultado = 1
@@ -155,6 +158,7 @@ var Calculadora = {
 		if (!Number(this.operacion)==false)
 		{
 			this.resultado = -Number(this.operacion)
+			this.resultado = this.resultado
 			sessionStorage.setItem("operacion",this.resultado.toString())
 		this.flagResultado = 1
 		this.muestraResultado()
