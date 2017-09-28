@@ -1,6 +1,6 @@
 var Calculadora = {
 	init: function () {
-		
+		this.punto = 0
 		this.resultado = 0
 		this.operacion=""
 		this.flagResultado = 1
@@ -67,7 +67,10 @@ var Calculadora = {
 		
 	}, //FIN ESCUCHA CLICK
 	asignaOperando: function (tecla) {	
-			
+			if ((!this.punto && tecla==".") || tecla!=".") {
+			if (tecla==".") { this.punto = 1 }
+			this.longitudOperando = this.longitudOperando +1
+			if (this.longitudOperando<10) {
 			if (!this.flagResultado) {
 			
 			this.operacion = sessionStorage.getItem("operacion")
@@ -81,13 +84,16 @@ var Calculadora = {
 			sessionStorage.setItem("operacion",this.operacion)
 			this.muestraResultado()		
 		} //FIN ELSE
+	} //FIN IF
+	} //FIN IF
 	}, //FIN ASIGNA OPERANDO
 	asignaOperador:  function (tecla) {
 			this.operacion = sessionStorage.getItem("operacion")
 			this.operacion =  this.operacion + "," + tecla + ","
 			sessionStorage.setItem("operacion",this.operacion)
 			this.flagResultado=0
-			this.muestraResultado()
+			this.punto = 0
+			this.longitudOperando=0
 	}, //FIN ASIGNA OPERADOR
 	ejecutaOperacion: function () {
 			arregloElementosOperacion = (sessionStorage.getItem("operacion")).split(",")
@@ -130,37 +136,42 @@ var Calculadora = {
 			} //FIN FOR
 			sessionStorage.setItem("operacionAnterior",sessionStorage.getItem("operacion"))			
 		} //FIN ELSE
-			this.resultado = this.resultado
-			sessionStorage.setItem("operacion",this.resultado.toString())
+			//longitud = this.resultado.toString().length
+			//if (longitud>9){this.resultado = this.resultado.toFixed(9)}
+			//else {this.resultado = this.resultado}
+			sessionStorage.setItem("operacion",this.resultado.toString().substr(0,9))
 			
 			this.flagResultado = 1
+			this.punto = 0
 			this.muestraResultado()
 	},//FIN EJECUTA OPERACION
 	
 	muestraResultado: function () {
 			arregloElementosOperacion = (sessionStorage.getItem("operacion")).split(",")
-			var textoOperacion =""
-			for (i=0;i<arregloElementosOperacion.length;i++) {
-				textoOperacion = 	textoOperacion + arregloElementosOperacion[i]
-			} //FIN FOR
+			var textoOperacion =arregloElementosOperacion[arregloElementosOperacion.length-1]
+			if (isNaN(textoOperacion)==false) {
 			pantalla = document.getElementById("display")
 			pantalla.innerHTML = textoOperacion
+		} //FIN IF
 	},//FIN MUESTRA RESULTADO
 	onClear: function () {
 		this.resultado = 0
 		sessionStorage.setItem("operacion",this.resultado.toString())
 		this.flagResultado = 1
+		this.longitudOperando = 0
+		this.punto = 0
 		this.muestraResultado()
 	},//FIN ONCLEAR
 	cambiaSigno: function () {
 	
 		this.operacion = sessionStorage.getItem("operacion")
-		if (!Number(this.operacion)==false)
+		if (isNaN(this.operacion)==false)
 		{
 			this.resultado = -Number(this.operacion)
 			this.resultado = this.resultado
 			sessionStorage.setItem("operacion",this.resultado.toString())
 		this.flagResultado = 1
+		this.punto = 0
 		this.muestraResultado()
 		} //FIN IF
 		
